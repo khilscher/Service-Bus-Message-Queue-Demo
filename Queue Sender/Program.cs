@@ -15,6 +15,7 @@ namespace Queue_Sender
     {
         static void Main(string[] args)
         {
+            //Copy & paste SB queue name created in Azure portal
             string queueName = "khqueue1";
             //Copy & paste sender SB Queue endpoint from Azure portal; append TransportType=Amqp to use AMQP
             string connection = "Endpoint=sb://khtest1.servicebus.windows.net/;SharedAccessKeyName=Sender;SharedAccessKey=Uq3yCwF22HAvxL5RC85tRRWaLCLn7l1xZlAl1lPEuEA=;TransportType=Amqp";
