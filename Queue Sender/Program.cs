@@ -18,11 +18,13 @@ namespace Queue_Sender
             //Copy & paste SB queue name created in Azure portal
             string queueName = "khqueue1";
             //Copy & paste sender SB Queue endpoint from Azure portal; append TransportType=Amqp to use AMQP
-            string connection = "Endpoint=sb://khtest1.servicebus.windows.net/;SharedAccessKeyName=Sender;SharedAccessKey=Uq3yCwF22HAvxL5RC85tRRWaLCLn7l1xZlAl1lPEuEA=;TransportType=Amqp";
+            //e.g. "Endpoint=sb://<namespace>.servicebus.windows.net/;SharedAccessKeyName=Sender;SharedAccessKey=pSrZDMSw0cI6uQr6SuAVJzA+CmvauYocPA/1Y042xxx=;TransportType=Amqp"
+            string connection = "";
             MessagingFactory factory = MessagingFactory.CreateFromConnectionString(connection);
             QueueClient queue = factory.CreateQueueClient(queueName);
-            string message = "Queue message over AMQP";
+            string message = "Test message over AMQP";
             BrokeredMessage bm = new BrokeredMessage(message);
+            bm.Properties.Add("Property1", "Value1");
             queue.Send(bm);
             Console.WriteLine("MessageId {0}", bm.MessageId);
             Thread.Sleep(3000);

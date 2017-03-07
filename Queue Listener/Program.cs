@@ -15,12 +15,19 @@ namespace Queue_Listener
             //Copy & paste SB queue name created in Azure portal
             string queueName = "khqueue1";
             //Copy & paste receiver SB Queue endpoint from Azure portal; append TransportType=Amqp to use AMQP
-            string connection = "Endpoint=sb://khtest1.servicebus.windows.net/;SharedAccessKeyName=Receiver;SharedAccessKey=vIqa5vlo9+c0YGxu+9xadEQ1aMUdwxgrcu2YCOqJNFw=;TransportType=Amqp";
+            //e.g. "Endpoint=sb://<namespace>.servicebus.windows.net/;SharedAccessKeyName=Receiver;SharedAccessKey=53qmlfuqiEzHHOkzW5C7CaXzlGzjs0ugA9f7OrDWzDDd;TransportType=Amqp"
+            string connection = "";
             MessagingFactory factory = MessagingFactory.CreateFromConnectionString(connection);
+
+            //Default receive mode is PeekLock. 
+            //https://docs.microsoft.com/en-us/dotnet/api/microsoft.servicebus.messaging.receivemode
+            //https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-fundamentals-hybrid-solutions
             QueueClient queue = factory.CreateQueueClient(queueName);
+
             while (true)
             {
                 BrokeredMessage message = queue.Receive();
+
                 if (message != null)
                 {
                     try
@@ -28,7 +35,7 @@ namespace Queue_Listener
                         Console.WriteLine("MessageId {0}", message.MessageId);
                         Console.WriteLine("Delivery {0}", message.DeliveryCount);
                         Console.WriteLine("Size {0}", message.Size);
-                        Console.WriteLine(message.GetBody<string>()); message.Complete();
+                        Console.WriteLine(message.GetBody<string>()); message.Complete(); //Queue will now delete the message
                     }
                     catch (Exception ex)
                     {
